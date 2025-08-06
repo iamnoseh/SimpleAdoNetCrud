@@ -1,38 +1,21 @@
 ﻿
-CREATE DATABASE "AdoNet-Practice-Db";
+CREATE DATABASE "Test-db";
 
-
-
-CREATE TABLE Students (
-    Id SERIAL PRIMARY KEY,
-    firstname VARCHAR(100) NOT NULL,
-    lastname VARCHAR(100) NOT NULL,
-    birthday DATE NOT NULL,
-    address VARCHAR(500),
-    level INTEGER NOT NULL
-    );
-
-CREATE TABLE Teachers (
-    Id SERIAL PRIMARY KEY,
-    firstname VARCHAR(100) NOT NULL,
-    lastname VARCHAR(100) NOT NULL,
-    birthday DATE NOT NULL,
-    address VARCHAR(500),
-    salary DECIMAL(10,2) NOT NULL
-    );
-
-
-INSERT INTO Students (firstname, lastname, birthday, address, level) VALUES
-    ('Алӣ', 'Юсуфов', '2000-01-15', 'Душанбе, кӯчаи Рӯдакӣ 25', 1),
-    ('Мариям', 'Ҳасанова', '1999-05-20', 'Душанбе, кӯчаи Айнӣ 10', 2),
-    ('Саид', 'Раҳимов', '2001-03-10', 'Душанбе, кӯчаи Фирдавсӣ 5', 1);
-
-INSERT INTO Teachers (firstname, lastname, birthday, address, salary) VALUES
-    ('Фарида', 'Каримова', '1980-08-12', 'Душанбе, кӯчаи Исмоили Сомонӣ 15', 2500.00),
-    ('Ҷамшед', 'Муҳаммадов', '1975-12-05', 'Душанбе, кӯчаи Шоҳ Мансур 8', 3000.00),
-    ('Нигора', 'Одинаева', '1985-04-18', 'Душанбе, кӯчаи Борбад 12', 2800.00);
-
-
-SELECT * FROM Students;
-
-SELECT * FROM Teachers;
+create table students
+(
+    id        serial primary key,
+    Firstname varchar(50) not null,
+    lastname  varchar(50),
+    address   varchar(100),
+    birthday  date,
+    level     int
+);
+create table teachers
+(
+    id        serial primary key,
+    Firstname varchar(50) not null,
+    lastname  varchar(50),
+    address   varchar(100),
+    birthday  date,
+    salary     decimal(10,2)
+);

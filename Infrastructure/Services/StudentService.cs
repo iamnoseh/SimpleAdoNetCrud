@@ -7,35 +7,35 @@ namespace Infrastructure.Services;
 
 public class StudentService : IStudentService
 {
-    private readonly string _connectionString = "Server=localhost;Database=AdoNet-Practice-Db;Username=postgres;Password=12345;";
+    private readonly string connectionString = "Server=localhost;Database=Test-db;Username=postgres;Password=12345;";
 
     public bool CreateStudent(Student student)
     {
         try
         {
-            using var connection = new NpgsqlConnection(_connectionString);
+            using var connection = new NpgsqlConnection(connectionString);
             connection.Open();
             const string query = @"
-                INSERT INTO Students (firstname, lastname, birthday, address, level) 
-                VALUES (@firstname, @lastname, @birthday, @address, @level) 
-                RETURNING Id;";
-
+                Insert into students(firstname,lastname,address,birthday,level) 
+                values(@firstname,@lastname,@address,@birthday,@level);
+            ";
             using var command = new NpgsqlCommand(query, connection);
-            command.Parameters.AddWithValue("@firstname", student.FirstName);
-            command.Parameters.AddWithValue("@lastname", student.LastName);
-            command.Parameters.AddWithValue("@birthday", student.Birthday);
-            command.Parameters.AddWithValue("@address", student.Address );
-            command.Parameters.AddWithValue("@level", student.Level);
-
-            var newId = command.ExecuteScalar();
-            student.Id = Convert.ToInt32(newId);
-            if (newId == null)
+            command.Parameters.AddWithValue("firstname", student.FirstName);
+            command.Parameters.AddWithValue("lastname", student.LastName);
+            command.Parameters.AddWithValue("address", student.Address);
+            command.Parameters.AddWithValue("birthday", student.Birthday);
+            command.Parameters.AddWithValue("level", student.Level);
+            var effect =  command.ExecuteNonQuery();  
+            connection.Close();
+            if (effect > 0)
             {
-                Console.WriteLine("Something went wrong");
-                return false;
+                Console.WriteLine("Student created successfully");
+                return true;
             }
-            Console.WriteLine("Student created successfully with id : " + newId);
-            return true;
+
+            Console.WriteLine("Student creation failed");
+            return false;
+          
         }
         catch (Exception ex)
         {
@@ -48,7 +48,7 @@ public class StudentService : IStudentService
     {
         try
         {
-            using var connection = new NpgsqlConnection(_connectionString);
+            using var connection = new NpgsqlConnection(connectionString);
             connection.Open();
 
             const string query = @"
@@ -63,10 +63,10 @@ public class StudentService : IStudentService
             command.Parameters.AddWithValue("@birthday", student.Birthday);
             command.Parameters.AddWithValue("@address", student.Address);
             command.Parameters.AddWithValue("@level", student.Level);
+            var effect = command.ExecuteNonQuery();
+            connection.Close();
 
-            var rowsAffected = command.ExecuteNonQuery();
-
-            if (rowsAffected == 0)
+            if (effect == 0)
             {
                 Console.WriteLine("Something went wrong");
                 return false;
@@ -86,7 +86,7 @@ public class StudentService : IStudentService
     {
         try
         {
-            using var connection = new NpgsqlConnection(_connectionString);
+            using var connection = new NpgsqlConnection(connectionString);
             connection.Open();
 
             const string query = "DELETE FROM Students WHERE Id = @Id;";
@@ -116,7 +116,7 @@ public class StudentService : IStudentService
     {
         try
         {
-            using var connection = new NpgsqlConnection(_connectionString);
+            using var connection = new NpgsqlConnection(connectionString);
             connection.Open();
 
             const string query = "SELECT Id, firstname, lastname, birthday, address, level FROM Students WHERE Id = @Id;";
@@ -130,12 +130,12 @@ public class StudentService : IStudentService
             {
                 return new Student
                 {
-                    Id = reader.GetInt32("Id"),
-                    FirstName = reader.GetString("firstname"),
-                    LastName = reader.GetString("lastname"),
-                    Birthday = DateOnly.FromDateTime(reader.GetDateTime("birthday")),
-                    Address =  reader.GetString("address"),
-                    Level = reader.GetInt32("level")
+                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                    FirstName = reader.GetString(reader.GetOrdinal("firstname")),
+                    LastName = reader.GetString(reader.GetOrdinal("lastname")),
+                    Address = reader.GetString(reader.GetOrdinal("address")),
+                    Birthday = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("birthday"))),
+                    Level = reader.GetInt32(reader.GetOrdinal("level"))
                 };
             }
 
@@ -153,7 +153,7 @@ public class StudentService : IStudentService
     {
         try
         {
-            using var connection = new NpgsqlConnection(_connectionString);
+            using var connection = new NpgsqlConnection(connectionString);
             connection.Open();
 
             const string query = "SELECT Id, firstname, lastname, birthday, address, level FROM Students ORDER BY Id;";
@@ -167,12 +167,12 @@ public class StudentService : IStudentService
             {
                 var student = new Student
                 {
-                    Id = reader.GetInt32("Id"),
-                    FirstName = reader.GetString("firstname"),
-                    LastName = reader.GetString("lastname"),
-                    Birthday = DateOnly.FromDateTime(reader.GetDateTime("birthday")),
-                    Address = reader.GetString("address"),
-                    Level = reader.GetInt32("level")
+                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                    FirstName = reader.GetString(reader.GetOrdinal("firstname")),
+                    LastName = reader.GetString(reader.GetOrdinal("lastname")),
+                    Address = reader.GetString(reader.GetOrdinal("address")),
+                    Birthday = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("birthday"))),
+                    Level = reader.GetInt32(reader.GetOrdinal("level"))
                 };
 
                 students.Add(student);

@@ -3,23 +3,25 @@
 using Domain.Models;
 using Infrastructure.Services;
 
+StudentService service = new StudentService();
+TeacherService teacherService = new TeacherService();
 
-var studentService = new StudentService();
-var newStudent = new Student
+// var student = new  Student("Hokim"," ",new DateOnly(2001,04,23),"Hisor",12);
+// student.Id = 3;
+//
+// var res = service.UpdateStudent(student);
+// Console.WriteLine(res);
+
+// var res = service.DeleteStudent(4);
+// Console.WriteLine(res);
+
+// var res = service.GetStudentById(3);
+// Console.WriteLine("FirstName: " + res.FirstName + " LastName: " + res.LastName + " BirthDate: " +  res.Birthday);
+//
+
+
+var res = teacherService.GetAllTeachers();
+foreach (var item in res)
 {
-    FirstName = "Anvar",
-    LastName = "Sasidov", 
-    Birthday = new DateOnly(2000, 5, 15),
-    Address = "Dangara",
-    Level = 7
-};
-
-var res = studentService.CreateStudent(newStudent);
-Console.WriteLine(res);
-
-
-var students = studentService.GetAllStudents();
-foreach (var student in students)
-{
-    Console.WriteLine(student.FirstName + " || " + student.LastName + " || " + student.Birthday + " || " + student.Address + " || " + student.Level);
+    Console.WriteLine($"{item.FirstName} || {item.LastName} || {item.Birthday} || {item.Address} || {item.Salary}");
 }
