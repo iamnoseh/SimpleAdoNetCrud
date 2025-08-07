@@ -1,5 +1,6 @@
 ﻿using Domain.Models;
 using Infrastructure.Interefaces;
+using Infrastructure.Helpers;
 using Npgsql;
 using System.Data;
 
@@ -7,7 +8,7 @@ namespace Infrastructure.Services;
 
 public class StudentService : IStudentService
 {
-    private readonly string connectionString = "Server=localhost;Database=Test-db;Username=postgres;Password=12345;";
+    private readonly string connectionString = DatabaseHelper.GetConnectionString();
 
     public bool CreateStudent(Student student)
     {

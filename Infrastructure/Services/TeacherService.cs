@@ -1,12 +1,13 @@
 ﻿using Domain.Models;
 using Infrastructure.Interefaces;
+using Infrastructure.Helpers;
 using Npgsql;
 
 namespace Infrastructure.Services;
 
 public class TeacherService : ITeacherService
 {
-    private readonly string connectionString = "Server=localhost;Database=Test-db;Username=postgres;Password=12345;";
+    private readonly string connectionString = DatabaseHelper.GetConnectionString();
 
     public bool CreateTeacher(Teacher teacher)
     {
